@@ -1,0 +1,90 @@
+#include <iostream>
+#include <ncurses/curses.h>
+#include <cstdlib>
+#include <ctime>
+#include <unistd.h>  
+
+
+const int SCREEN_WIDTH = 90;
+const int SCREEN_HEIGHT = 26;
+const int WIN_WIDTH = 70;
+
+using namespace std;
+
+int enemyY[3];
+int enemyX[3];
+int enemyFlag[3];
+char car[4][4] = {
+    {' ', '+', '+', ' '},
+    {'+', '+', '+', '+'},
+    {' ', '+', '+', ' '},
+    {'+', '+', '+', '+'}
+};
+
+int carPos = WIN_WIDTH / 2;
+int score = 0;
+
+void drawBorder() {
+    for (int i = 0; i < SCREEN_HEIGHT; i++) {
+        for (int j = 0; j < 17; j++) {
+            mvprintw(i, j, "+");
+            mvprintw(i, WIN_WIDTH - j, "+");
+        }
+    }
+    for (int i = 0; i < SCREEN_HEIGHT; i++) {
+        mvprintw(i, SCREEN_WIDTH, "+");
+    }
+}
+
+void genEnemy(int ind) {
+    enemyX[ind] = 17 + rand() % 33;
+}
+
+void drawEnemy(int ind) {
+    if (enemyFlag[ind]) {
+        mvprintw(enemyY[ind], enemyX[ind], "****");
+        mvprintw(enemyY[ind] + 1, enemyX[ind], " ** ");
+        mvprintw(enemyY[ind] + 2, enemyX[ind], "****");
+        mvprintw(enemyY[ind] + 3, enemyX[ind], " ** ");
+    }
+}
+
+void eraseEnemy(int ind) {
+    if (enemyFlag[ind]) {
+        mvprintw(enemyY[ind], enemyX[ind], "    ");
+        mvprintw(enemyY[ind] + 1, enemyX[ind], "    ");
+        mvprintw(enemyY[ind] + 2, enemyX[ind], "    ");
+        mvprintw(enemyY[ind] + 3, enemyX[ind], "    ");
+    }
+}
+
+void resetEnemy(int ind) {
+    eraseEnemy(ind);
+    enemyY[ind] = 1;
+    genEnemy(ind);
+}
+
+void drawCar() {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            mvprintw(i + 22, j + carPos, "%c", car[i][j]);
+        }
+    }
+}
+
+void eraseCar() {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            mvprintw(i + 22, j + carPos, " ");
+        }
+    }
+}
+
+int collision() {
+    if (enemyY[0] + 4 >= 23) {
+        if (enemyX[0] + 4 - carPos >= 0 && enemyX[0] + 4 - carPos < 9) {
+            return 1;
+        }
+    }
+    return 0;
+}
