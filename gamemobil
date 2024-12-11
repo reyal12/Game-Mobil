@@ -88,3 +88,56 @@ int collision() {
     }
     return 0;
 }
+
+void gameover() {
+    clear();
+    mvprintw(10, 30, "--------------------------");
+    mvprintw(11, 30, "-------- Game Over -------");
+    mvprintw(12, 30, "--------------------------");
+    mvprintw(14, 30, "Press any key to go back to menu.");
+    refresh();
+    getch();
+}
+
+void updateScore() {
+    mvprintw(5, WIN_WIDTH + 7, "Score: %d", score);
+}
+
+void instructions() {
+    clear();
+    mvprintw(5, 10, "Instructions");
+    mvprintw(6, 10, "----------------");
+    mvprintw(7, 10, "Avoid Cars by moving left or right.");
+    mvprintw(9, 10, "Press 'a' to move left");
+    mvprintw(10, 10, "Press 'd' to move right");
+    mvprintw(12, 10, "Press 'escape' to exit");
+    mvprintw(14, 10, "Press any key to go back to menu");
+    refresh();
+    getch();
+}
+
+void play() {
+    carPos = WIN_WIDTH / 2;
+    score = 0;
+    enemyFlag[0] = 1;
+    enemyFlag[1] = 0;
+    enemyY[0] = enemyY[1] = 1;
+
+    clear();
+    drawBorder();
+    updateScore();
+    genEnemy(0);
+    genEnemy(1);
+
+    mvprintw(2, WIN_WIDTH + 7, "Car Game");
+    mvprintw(4, WIN_WIDTH + 6, "----------");
+    mvprintw(6, WIN_WIDTH + 6, "----------");
+    mvprintw(12, WIN_WIDTH + 7, "Control ");
+    mvprintw(13, WIN_WIDTH + 7, "-------- ");
+    mvprintw(14, WIN_WIDTH + 2, " A Key - Left");
+    mvprintw(15, WIN_WIDTH + 2, " D Key - Right");
+
+    mvprintw(5, 18, "Press any key to start");
+    refresh();
+    getch();
+    mvprintw(5, 18, "                      ");
