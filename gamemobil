@@ -141,3 +141,89 @@ void play() {
     refresh();
     getch();
     mvprintw(5, 18, "                      ");
+
+while (1) {
+        char ch = getch(); 
+        
+        
+        if (ch == 'a' || ch == 'A') {
+            if (carPos > 18)
+                carPos -= 4;
+        }
+        if (ch == 'd' || ch == 'D') {
+            if (carPos < WIN_WIDTH - 4)
+                carPos += 4;
+        }
+        if (ch == 27) { 
+            break;
+        }
+
+        drawCar();
+        drawEnemy(0);
+        drawEnemy(1);
+        if (collision() == 1) {
+            gameover();
+            return;
+        }
+        refresh();
+        eraseCar();
+        eraseEnemy(0);
+        eraseEnemy(1);
+
+        if (enemyY[0] == 10)
+            if (enemyFlag[1] == 0)
+                enemyFlag[1] = 1;
+
+        if (enemyFlag[0] == 1)
+            enemyY[0] += 1;
+
+        if (enemyFlag[1] == 1)
+            enemyY[1] += 1;
+
+        if (enemyY[0] > SCREEN_HEIGHT - 4) {
+            resetEnemy(0);
+            score++;
+            updateScore();
+        }
+        if (enemyY[1] > SCREEN_HEIGHT - 4) {
+            resetEnemy(1);
+            score++;
+            updateScore();
+        }
+
+        usleep(50000); 
+    }
+}
+
+int main() {
+    srand((unsigned)time(NULL));
+    initscr();          
+    raw();              
+    keypad(stdscr, TRUE);  
+    noecho();           
+
+    do {
+        clear();
+        mvprintw(5, 45, " -------------------------- ");
+        mvprintw(6, 45, " |        Car Game        | ");
+        mvprintw(7, 45, " --------------------------");
+        mvprintw(9, 45, "1. Start Game");
+        mvprintw(10, 45, "2. Instructions");
+        mvprintw(11, 45, "3. Quit");
+        mvprintw(13, 45, "Select option: ");
+        refresh();
+
+        char op = getch();
+
+        if (op == '1')
+            play();
+        else if (op == '2')
+            instructions();
+        else if (op == '3')
+            break;
+
+    } while (1);
+
+    endwin(); 
+    return 0;
+}
